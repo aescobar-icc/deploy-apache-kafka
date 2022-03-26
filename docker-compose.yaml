@@ -1,0 +1,57 @@
+version: '3.5'
+networks:
+  kafka_net:
+    name: kafka_net
+    ipam:
+      config:
+        - subnet: 172.20.30.0/24
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
+    ports:
+      - "2181:2181"
+    env_file: 
+      - services/global.env
+      - services/zookeeper/.env
+    volumes:
+      - type: bind
+        source: ./config/zookeeper.properties
+        target: /opt/kafka/config/zookeeper.properties
+    networks:
+      kafka_net:
+        ipv4_address: 172.20.30.2
+  broker-1:
+    container_name: broker-1
+    image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
+    ports:
+      - "9092:9092"
+    env_file: 
+      - services/global.env
+      - services/broker-1/.env
+    volumes:
+      - type: bind
+        source: ./config/server.properties
+        target: /opt/kafka/config/server.properties
+    networks:
+      kafka_net:
+        ipv4_address: 172.20.30.3
+    links:
+      - "zookeeper:zookeeper"
+  broker-2:
+    container_name: broker-2
+    image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
+    ports:
+      - "9093:9092"
+    env_file: 
+      - services/global.env
+      - services/broker-2/.env
+    volumes:
+      - type: bind
+        source: ./config/server.properties
+        target: /opt/kafka/config/server.properties
+    networks:
+      kafka_net:
+        ipv4_address: 172.20.30.4
+    links:
+      - "zookeeper:zookeeper"
