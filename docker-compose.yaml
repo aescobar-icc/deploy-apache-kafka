@@ -18,14 +18,16 @@ services:
       - type: bind
         source: ./config/zookeeper.properties
         target: /opt/kafka/config/zookeeper.properties
+      - ../apache-kafka-data/zookeeper/data:/tmp/zookeeper
     networks:
       kafka_net:
         ipv4_address: 172.20.30.2
   broker-1:
+    hostname: "broker-1.mydomain.com"
     container_name: broker-1
     image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
     ports:
-      - "9092:9092"
+      - "29091:29091"
     env_file: 
       - services/global.env
       - services/broker-1/.env
@@ -33,16 +35,18 @@ services:
       - type: bind
         source: ./config/server.properties
         target: /opt/kafka/config/server.properties
+      - ../apache-kafka-data/broker-1/data:/tmp/kafka-logs
     networks:
       kafka_net:
         ipv4_address: 172.20.30.3
     links:
       - "zookeeper:zookeeper"
   broker-2:
+    hostname: "broker-2.mydomain.com"
     container_name: broker-2
     image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
     ports:
-      - "9093:9092"
+      - "29092:29092"
     env_file: 
       - services/global.env
       - services/broker-2/.env
@@ -50,6 +54,7 @@ services:
       - type: bind
         source: ./config/server.properties
         target: /opt/kafka/config/server.properties
+      - ../apache-kafka-data/broker-2/data:/tmp/kafka-logs
     networks:
       kafka_net:
         ipv4_address: 172.20.30.4

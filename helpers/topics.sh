@@ -3,8 +3,9 @@
 
 if [ $# -lt 1 ];
 then
-        echo "USAGE: $0 --topic=<topicname> \noptions: --replic=<number> --part=<number>"
-        exit 1
+    DOCKER_RUN="cd /opt/kafka/bin && ./kafka-topics.sh "
+    docker exec broker-1 bash -c "$DOCKER_RUN"
+    exit 1
 fi
 
 
@@ -33,7 +34,12 @@ done
 source ./base.sh
 load_env_file ../services/global.env
 
+#samples
+# ./topics.sh --topic gps_signal --create --replication-factor 2 --partitions 2
+# ./topics.sh --topic gps_signal --describe
+# ./topics.sh --list
 
-DOCKER_RUN="cd /opt/kafka/bin && ./kafka-topics.sh $TOPIC_ACTION $TOPIC_ARGS --bootstrap-server localhost:9092"
+
+DOCKER_RUN="cd /opt/kafka/bin && ./kafka-topics.sh $@ --bootstrap-server localhost:9092"
 log "topic action: $TOPIC_ACTION"
 docker exec broker-1 bash -c "$DOCKER_RUN"
