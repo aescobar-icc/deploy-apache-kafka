@@ -9,6 +9,7 @@ services:
   zookeeper:
     container_name: zookeeper
     image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
+    restart: always
     ports:
       - "2181:2181"
     env_file: 
@@ -26,6 +27,7 @@ services:
     hostname: "broker-1.mydomain.com"
     container_name: broker-1
     image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
+    restart: always
     ports:
       - "29091:29091"
     env_file: 
@@ -45,6 +47,7 @@ services:
     hostname: "broker-2.mydomain.com"
     container_name: broker-2
     image: "aescobaricc/base-apache-kafka:1.0-jdk8-kafka3.1.0"
+    restart: always
     ports:
       - "29092:29092"
     env_file: 
